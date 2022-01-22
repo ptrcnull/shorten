@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ .host }}</title>
+    <style>
+        body {
+            background: #111111;
+            color: #dddddd;
+            display: flex;
+            height: calc(100vh - 32px);
+            justify-content: center;
+            align-items: center;
+        }
+        form {
+            display: flex;
+            height: calc(100vh - 32px);
+            justify-content: center;
+            align-items: center;
+        }
+        input {
+            font-size: 30px;
+            width: 70vw;
+            border: none;
+            color: #dddddd;
+            background-color: {{ if .error }}rgba(255, 0, 0, 0.25){{ else }}rgba(255, 255, 255, 0.03){{ end }};
+            text-align: center;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        h1 {
+            font-size: 30px;
+        }
+        a {
+            font-family: sans-serif;
+            color: #dddddd;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+{{ if .code }}
+<h1><a href="https://{{ .host }}/{{ .code }}">https://{{ .host }}/{{ .code }}</a></h1>
+{{ else }}
+<form method="POST" action="/" autocomplete="off" autocapitalize="off">
+    <input type="text" {{ with .error }}placeholder="{{ . }}"{{ end }} name="url" autocomplete="off" autocapitalize="off">
+</form>
+{{ end }}
+</body>
+</html>
