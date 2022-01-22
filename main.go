@@ -110,6 +110,14 @@ func (h *Handler) HomepageHandler(wr http.ResponseWriter, req *http.Request) {
 func (h *Handler) CreateHandler(wr http.ResponseWriter, req *http.Request) {
 	log.Println("CreateHandler")
 
+	ip := req.RemoteAddr
+	if strings.HasPrefix(ip, "127.0.0.1") {
+		proxyIp := strings.Split(req.Header.Get("X-Forwarded-For"), ",")[0]
+		if proxyIp != "" {
+			ip = proxyIp
+		}
+	}
+
 	req.ParseForm()
 	code, err := h.GetCode(req.Form.Get("url"), req.RemoteAddr)
 	if err != nil {
