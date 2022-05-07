@@ -104,7 +104,7 @@ func (h *Handler) HomepageHandler(wr http.ResponseWriter, req *http.Request) {
 		wr.Write([]byte("https://" + os.Getenv("SHORTEN_HOST") + "/" + code))
 	}
 
-	Render(wr, nil)
+	Render(wr, map[string]string{})
 }
 
 func (h *Handler) CreateHandler(wr http.ResponseWriter, req *http.Request) {
