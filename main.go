@@ -124,7 +124,7 @@ func (h *Handler) CreateHandler(wr http.ResponseWriter, req *http.Request) {
 	}
 
 	req.ParseForm()
-	code, err := h.GetCode(req.Form.Get("url"), req.RemoteAddr)
+	code, err := h.GetCode(req.Form.Get("url"), ip)
 	if err != nil {
 		Render(wr, map[string]string{"error": err.Error()})
 	} else {
