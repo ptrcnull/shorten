@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"database/sql"
+
 	"github.com/asaskevich/govalidator"
 	_ "github.com/lib/pq"
 )
@@ -143,7 +144,7 @@ func (h *Handler) RedirectHandler(wr http.ResponseWriter, req *http.Request) {
 	}
 
 	go func() {
-		_, _ = h.db.Exec(`UPDATE urls SET hits = $1 WHERE code = $2`, hits + 1, code)
+		_, _ = h.db.Exec(`UPDATE urls SET hits = $1 WHERE code = $2`, hits+1, code)
 	}()
 
 	wr.Header().Set("Location", url)
