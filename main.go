@@ -71,7 +71,11 @@ func main() {
 		panic(err)
 	}
 
-	panic(http.ListenAndServe("127.0.0.1:4488", &Handler{db: db}))
+	bind := os.Getenv("SHORTEN_BIND")
+	if bind == "" {
+		bind = "127.0.0.1:4488"
+	}
+	panic(http.ListenAndServe(bind, &Handler{db: db}))
 }
 
 type Handler struct {
