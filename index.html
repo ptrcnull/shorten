@@ -10,6 +10,7 @@
             height: calc(100vh - 32px);
             justify-content: center;
             align-items: center;
+            font-family: sans-serif;
         }
         form {
             display: flex;
@@ -31,9 +32,14 @@
             font-size: 30px;
         }
         a {
-            font-family: sans-serif;
             color: #dddddd;
             text-decoration: none;
+        }
+        footer {
+            width: 100vw;
+            position: absolute;
+            bottom: 10px;
+            text-align: center;
         }
     </style>
 </head>
@@ -44,6 +50,9 @@
 <form method="POST" action="/" autocomplete="off" autocapitalize="off">
     <input type="text" {{ with .error }}placeholder="{{ . }}"{{ end }} name="url" autocomplete="off" autocapitalize="off">
 </form>
+{{ end }}
+{{ if .mail }}
+<footer>support, takedown, abuse reports: {{ .mail }}</footer>
 {{ end }}
 </body>
 </html>

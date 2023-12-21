@@ -195,6 +195,7 @@ func (h *Handler) GetCode(url string, ip string) (string, error) {
 func Render(wr http.ResponseWriter, data map[string]string) {
 	wr.Header().Set("Content-Type", "text/html")
 	data["host"] = os.Getenv("SHORTEN_HOST")
+	data["mail"] = os.Getenv("SHORTEN_MAIL")
 	err := tmpl.Execute(wr, data)
 	if err != nil {
 		log.Println("error writing template:", err)
