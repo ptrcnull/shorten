@@ -137,7 +137,7 @@ func (h *Handler) RedirectHandler(wr http.ResponseWriter, req *http.Request) {
 			log.Println("hits query error:", err)
 		}
 		wr.Header().Set("Location", "/")
-		wr.WriteHeader(http.StatusMovedPermanently)
+		wr.WriteHeader(http.StatusFound)
 		return
 	}
 
