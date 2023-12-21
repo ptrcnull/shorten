@@ -96,8 +96,6 @@ func (h *Handler) ServeHTTP(wr http.ResponseWriter, req *http.Request) {
 }
 
 func (h *Handler) HomepageHandler(wr http.ResponseWriter, req *http.Request) {
-	log.Println("HomepageHandler")
-
 	url := req.URL.Query().Get("url")
 	if url != "" {
 		code, err := h.GetCode(url, req.RemoteAddr)
@@ -113,8 +111,6 @@ func (h *Handler) HomepageHandler(wr http.ResponseWriter, req *http.Request) {
 }
 
 func (h *Handler) CreateHandler(wr http.ResponseWriter, req *http.Request) {
-	log.Println("CreateHandler")
-
 	ip := req.RemoteAddr
 	if strings.HasPrefix(ip, "127.0.0.1") {
 		proxyIp := strings.Split(req.Header.Get("X-Forwarded-For"), ",")[0]
@@ -133,8 +129,6 @@ func (h *Handler) CreateHandler(wr http.ResponseWriter, req *http.Request) {
 }
 
 func (h *Handler) RedirectHandler(wr http.ResponseWriter, req *http.Request) {
-	log.Println("RedirectHandler")
-
 	code := req.URL.Path[1:]
 	var url string
 	var hits uint64
@@ -169,7 +163,6 @@ func (h *Handler) CodeExists(code string) bool {
 }
 
 func (h *Handler) GetCode(url string, ip string) (string, error) {
-	log.Printf("url: %#v\n", url)
 	if !strings.HasPrefix(url, "http") || !govalidator.IsURL(url) {
 		return "", fmt.Errorf("invalid URL")
 	}
@@ -180,6 +173,7 @@ func (h *Handler) GetCode(url string, ip string) (string, error) {
 		return code, nil
 	}
 	if err != sql.ErrNoRows {
+		log.Println("sql error:", err)
 		return "", fmt.Errorf("query: %w", err)
 	}
 
