@@ -7,6 +7,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	neturl "net/url"
 	"os"
 	"strings"
 	"time"
@@ -66,6 +67,13 @@ func main() {
 		created_at timestamp with time zone not null,
 		author     text not null,
 		hits       bigint not null
+	);`)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS blacklist (
+		domain     text not null
 	);`)
 	if err != nil {
 		panic(err)
@@ -167,8 +175,25 @@ func (h *Handler) GetCode(url string, ip string) (string, error) {
 		return "", fmt.Errorf("invalid URL")
 	}
 
+	parsed, err := neturl.Parse(url)
+	if err != nil {
+		return "", fmt.Errorf("invalid URL")
+	}
+	hostname := parsed.Hostname()
+
+	// tbh we don't care about the value here but why not
+	var res string
+	err = h.db.QueryRow(`SELECT domain FROM blacklist WHERE domain = $1`, hostname).Scan(&res)
+	if err != sql.ErrNoRows {
+		if err != nil {
+			log.Println("sql error:", err)
+			return "", fmt.Errorf("query: %w", err)
+		}
+		return "", fmt.Errorf("invalid URL")
+	}
+
 	var code string
-	err := h.db.QueryRow(`SELECT code FROM urls WHERE url = $1 LIMIT 1`, url).Scan(&code)
+	err = h.db.QueryRow(`SELECT code FROM urls WHERE url = $1 LIMIT 1`, url).Scan(&code)
 	if err == nil {
 		return code, nil
 	}
