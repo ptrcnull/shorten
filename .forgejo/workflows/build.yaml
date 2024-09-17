@@ -1,7 +1,12 @@
+defaults:
+  run:
+    shell: sh
 on: [push]
 jobs:
   test:
-    runs-on: docker
+    runs-on: alpine
     steps:
+      - run: apk add nodejs-current git
       - uses: actions/checkout@v3
+      - run: apk add go
       - run: go build
